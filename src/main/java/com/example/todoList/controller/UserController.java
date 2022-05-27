@@ -1,6 +1,5 @@
 package com.example.todoList.controller;
 
-import com.example.todoList.entity.Task;
 import com.example.todoList.entity.User;
 import com.example.todoList.service.UserService;
 import lombok.RequiredArgsConstructor;
