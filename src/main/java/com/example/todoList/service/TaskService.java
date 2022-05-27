@@ -44,11 +44,11 @@ public class TaskService {
     return task;
   }
 
-  public boolean addNewTask(Task task) {
+  public Task addNewTask(Task task) {
     Long userId = task.getUser().getId();
     if (userRepository.existsById(userId)) {
       taskRepository.save(task);
-      return true;
+      return task;
     }
     throw new UserNotFoundException(String.format("user with id %s doesn't not exist", userId));
   }

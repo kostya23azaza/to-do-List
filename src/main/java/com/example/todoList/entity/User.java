@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +30,7 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-public class User {
+public class User extends RepresentationModel<User> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

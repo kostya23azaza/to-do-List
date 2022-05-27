@@ -114,7 +114,7 @@ public class TaskServiceTest {
     newTask.setId(5L);
 
     when(userRepository.existsById(2L)).thenReturn(true);
-    assertTrue(taskService.addNewTask(newTask));
+    assertEquals(taskService.addNewTask(newTask), newTask);
 
     verify(userRepository).existsById(2L);
     verify(taskRepository).save(newTask);

@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,8 +47,8 @@ public class TaskControllerTest {
 
   @Test
   public void createTaskTest() {
-    when(taskService.addNewTask(task)).thenReturn(true);
-    assertTrue(taskController.createTask(task));
+    when(taskService.addNewTask(task)).thenReturn(task);
+    assertEquals(task, taskController.createTask(task).getBody());
     verify(taskService).addNewTask(task);
   }
 
@@ -67,7 +68,7 @@ public class TaskControllerTest {
   @Test
   public void getAllTasksTest() {
     when(taskService.getAllTasks()).thenReturn(List.of(task));
-    assertEquals(taskController.getAllTasks(), List.of(task));
+    assertEquals(new ArrayList<>(taskController.getAllTasks().getContent()), List.of(task));
     verify(taskService).getAllTasks();
   }
 

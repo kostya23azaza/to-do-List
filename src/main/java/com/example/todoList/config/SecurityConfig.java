@@ -26,7 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
       .antMatchers("/users/registration").not().fullyAuthenticated()
       .anyRequest().authenticated()
       .and()
-      .formLogin();
+      .formLogin()
+      .defaultSuccessUrl("/tasks/all", true)
+      .permitAll()
+      .and()
+      .logout()
+      .logoutUrl("/logout")
+      .permitAll()
+      .and()
+      .httpBasic();
 
   }
 
