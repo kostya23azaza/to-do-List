@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.example.todoList.dto.ExceptionDto;
 import com.example.todoList.exception.TaskNotFoundException;
 import com.example.todoList.exception.UserNotFoundException;
+import com.example.todoList.exception.UserValidationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -35,5 +36,16 @@ public class ControllerExceptionAdviceTest {
 
     assertEquals(exceptionDto, controllerExceptionAdvice.handleUserNotFoundException(
       new UserNotFoundException("UserNotFoundException message")));
+  }
+
+  @Test
+  void handleUserValidationExceptionTest() {
+    exceptionDto = ExceptionDto.builder()
+      .httpStatus(HttpStatus.BAD_REQUEST)
+      .message("UserValidationException message")
+      .build();
+
+    assertEquals(exceptionDto, controllerExceptionAdvice.handleUserValidationException(
+      new UserValidationException("UserValidationException message")));
   }
 }

@@ -19,7 +19,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -72,7 +71,7 @@ public class UserServiceTest {
   @Test
   public void saveUserTest() {
     when(userRepository.save(user)).thenReturn(user);
-    assertTrue(userService.saveUser(user));
+    assertEquals(user, userService.save(user));
     verify(userRepository).save(user);
   }
 
@@ -93,7 +92,7 @@ public class UserServiceTest {
 
   @Test
   public void getAllUsersTest() {
-    userService.getAllUsers();
+    userService.getAll();
     verify(userRepository).findAll();
   }
 

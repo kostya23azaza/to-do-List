@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +32,8 @@ public class TaskService {
     }
   }
 
-  public Task updateTask(Task task) {
-    Long id = task.getId();
+  public Task update(Task task) {
+    Long id = Optional.of(task).orElseThrow(() -> new IllegalArgumentException("task id can't be null")).getId();
     if (taskRepository.existsById(id)) {
       Task updatedTask = taskRepository.findById(id)
         .orElseThrow(() -> new TaskNotFoundException(String.format("task with id %s doesn't not exist", id)));
@@ -44,8 +45,9 @@ public class TaskService {
     return task;
   }
 
-  public Task addNewTask(Task task) {
-    Long userId = task.getUser().getId();
+  public Task create(Task task) {
+    Long userId = Optional.of(task.getUser())
+      .orElseThrow(() -> new UserNotFoundException("user with doesn't not exist")).getId();
     if (userRepository.existsById(userId)) {
       taskRepository.save(task);
       return task;
@@ -53,7 +55,7 @@ public class TaskService {
     throw new UserNotFoundException(String.format("user with id %s doesn't not exist", userId));
   }
 
-  public List<Task> getAllTasks() {
+  public List<Task> getAll() {
     return taskRepository.findAll();
   }
 }

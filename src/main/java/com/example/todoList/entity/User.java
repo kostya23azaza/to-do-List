@@ -33,17 +33,14 @@ public class User extends RepresentationModel<User> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private Long id;
 
   @Column(unique = true)
   @NotNull
   private String username;
 
-  @Column(name = "password")
   private String password;
 
-  @Column(name = "email")
   private String email;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
@@ -56,17 +53,4 @@ public class User extends RepresentationModel<User> {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
   @JsonBackReference
   private Set<Role> roles;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    User user = (User) o;
-    return username.equals(user.username);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(username);
-  }
 }

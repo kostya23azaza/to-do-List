@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,16 +44,9 @@ public class UserControllerTest {
 
   @Test
   public void getAllUsersTest() {
-    when(userService.getAllUsers()).thenReturn(List.of(user));
+    when(userService.getAll()).thenReturn(List.of(user));
     assertEquals(new ArrayList<>(userController.getAllUsers().getContent()), List.of(user));
-    verify(userService).getAllUsers();
-  }
-
-  @Test
-  public void addUserTest() {
-    when(userService.saveUser(user)).thenReturn(true);
-    assertEquals(userController.addUser(user).getStatusCode(), HttpStatus.CREATED);
-    verify(userService).saveUser(user);
+    verify(userService).getAll();
   }
 
 }

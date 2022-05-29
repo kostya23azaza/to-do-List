@@ -46,9 +46,9 @@ public class TaskControllerTest {
 
   @Test
   public void createTaskTest() {
-    when(taskService.addNewTask(task)).thenReturn(task);
-    assertEquals(task, taskController.createTask(task).getBody());
-    verify(taskService).addNewTask(task);
+    when(taskService.create(task)).thenReturn(task);
+    assertEquals(task, taskController.createTask(task));
+    verify(taskService).create(task);
   }
 
   @Test
@@ -59,16 +59,16 @@ public class TaskControllerTest {
 
   @Test
   public void updateTaskTest() {
-    when(taskService.updateTask(task)).thenReturn(task);
-    assertEquals(task, taskController.updateTask(task).getBody());
-    verify(taskService).updateTask(task);
+    when(taskService.update(task)).thenReturn(task);
+    assertEquals(task, taskController.updateTask(task));
+    verify(taskService).update(task);
   }
 
   @Test
   public void getAllTasksTest() {
-    when(taskService.getAllTasks()).thenReturn(List.of(task));
+    when(taskService.getAll()).thenReturn(List.of(task));
     assertEquals(new ArrayList<>(taskController.getAllTasks().getContent()), List.of(task));
-    verify(taskService).getAllTasks();
+    verify(taskService).getAll();
   }
 
 }

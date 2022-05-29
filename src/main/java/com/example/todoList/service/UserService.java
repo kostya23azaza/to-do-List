@@ -3,6 +3,7 @@ package com.example.todoList.service;
 import com.example.todoList.entity.Role;
 import com.example.todoList.entity.User;
 import com.example.todoList.exception.UserNotFoundException;
+import com.example.todoList.exception.UserValidationException;
 import com.example.todoList.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,12 +41,15 @@ public class UserService implements UserDetailsService {
     return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
   }
 
-  public boolean saveUser(User user) {
-    user.setRoles(user.getRoles());
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
+  public User save(User user) {
+    if (!userRepository.existsByUsername(user.getUsername())) {
+      user.setRoles(user.getRoles());
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-    userRepository.save(user);
-    return true;
+      userRepository.save(user);
+      return user;
+    }
+    throw new UserValidationException(String.format("user with username %s already exist", user.getUsername()));
   }
 
   public User getUserById(Long id) {
@@ -53,7 +57,7 @@ public class UserService implements UserDetailsService {
       .orElseThrow(() -> new UserNotFoundException(String.format("user with id %s doesn't not exist", id)));
   }
 
-  public List<User> getAllUsers() {
+  public List<User> getAll() {
     return userRepository.findAll();
   }
 }

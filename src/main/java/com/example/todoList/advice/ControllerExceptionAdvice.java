@@ -3,6 +3,7 @@ package com.example.todoList.advice;
 import com.example.todoList.dto.ExceptionDto;
 import com.example.todoList.exception.TaskNotFoundException;
 import com.example.todoList.exception.UserNotFoundException;
+import com.example.todoList.exception.UserValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,5 +37,13 @@ public class ControllerExceptionAdvice {
       .build();
   }
 
-
+  @ExceptionHandler(UserValidationException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ExceptionDto handleUserValidationException(UserValidationException e) {
+    log.error(ERROR_MESSAGE,e.getClass().getSimpleName(), e);
+    return ExceptionDto.builder()
+      .message(e.getMessage())
+      .httpStatus(HttpStatus.BAD_REQUEST)
+      .build();
+  }
 }

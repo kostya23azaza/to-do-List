@@ -71,7 +71,7 @@ public class TaskServiceTest {
 
   @Test
   public void getAllTasksTest() {
-    taskService.getAllTasks();
+    taskService.getAll();
     verify(taskRepository).findAll();
   }
 
@@ -83,13 +83,12 @@ public class TaskServiceTest {
     Task newTask = new Task();
     newTask.setId(1L);
     newTask.setName("new task");
-    Task updatedTask = taskService.updateTask(newTask);
+    Task updatedTask = taskService.update(newTask);
 
     assertEquals(newTask, updatedTask);
 
     verify(taskRepository).existsById(1L);
     verify(taskRepository).findById(1L);
-    verify(taskRepository).save(updatedTask);
   }
 
   @Test
@@ -99,7 +98,7 @@ public class TaskServiceTest {
     Task failTask = new Task();
     failTask.setId(3L);
 
-    assertThrows(TaskNotFoundException.class, () -> taskService.updateTask(failTask));
+    assertThrows(TaskNotFoundException.class, () -> taskService.update(failTask));
   }
 
   @Test
@@ -113,7 +112,7 @@ public class TaskServiceTest {
     newTask.setId(5L);
 
     when(userRepository.existsById(2L)).thenReturn(true);
-    assertEquals(taskService.addNewTask(newTask), newTask);
+    assertEquals(taskService.create(newTask), newTask);
 
     verify(userRepository).existsById(2L);
     verify(taskRepository).save(newTask);
@@ -130,6 +129,6 @@ public class TaskServiceTest {
     newTask.setId(5L);
 
     when(userRepository.existsById(2L)).thenReturn(false);
-    assertThrows(UserNotFoundException.class, () -> taskService.addNewTask(newTask));
+    assertThrows(UserNotFoundException.class, () -> taskService.create(newTask));
   }
 }
