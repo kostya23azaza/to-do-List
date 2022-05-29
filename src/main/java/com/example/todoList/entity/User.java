@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.engine.jdbc.Size;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
+import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -29,7 +30,7 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-public class User extends RepresentationModel<User> {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

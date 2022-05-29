@@ -1,7 +1,9 @@
 package com.example.todoList.controller;
 
+import com.example.todoList.dto.UserDto;
 import com.example.todoList.entity.User;
 import com.example.todoList.service.UserService;
+import com.example.todoList.util.converter.UserToUserDtoConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -26,17 +29,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserController {
 
   private final UserService userService;
+  private final UserToUserDtoConverter converter;
 
   @PostMapping("/registration")
   @ResponseStatus(HttpStatus.CREATED)
-  public void addUser(@RequestBody User user) {
+  public void create(@RequestBody User user) {
     userService.save(user);
   }
 
   @GetMapping(value = "/get/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public User getUserById(@PathVariable Long id) {
-    User user = userService.getUserById(id);
+  public UserDto getUserById(@PathVariable Long id) {
+    UserDto user = converter.convert(userService.getUserById(id));
     user.add(linkTo(methodOn(UserController.class)
       .getUserById(id))
       .withSelfRel());
@@ -45,8 +49,11 @@ public class UserController {
 
   @GetMapping(value = "/all")
   @ResponseStatus(HttpStatus.OK)
-  public CollectionModel<User> getAllUsers() {
-    List<User> allUsers = userService.getAll();
+  public CollectionModel<UserDto> getAll() {
+    List<UserDto> allUsers = userService.getAll()
+      .stream()
+      .map(converter::convert)
+      .collect(Collectors.toList());
     allUsers.forEach(user -> {
       Long userId = user.getId();
       Link selfLink = linkTo(UserController.class).slash(userId).withSelfRel();

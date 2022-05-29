@@ -40,32 +40,32 @@ public class TaskController {
 
   @PostMapping("/create")
   @ResponseStatus(HttpStatus.CREATED)
-  public Task createTask(@RequestBody Task task) {
+  public Task create(@RequestBody Task task) {
     Task newTask = taskService.create(task);
     newTask.add(linkTo(methodOn(TaskController.class)
-      .createTask(task))
+      .create(task))
       .withSelfRel());
     return newTask;
   }
 
   @DeleteMapping("/delete/{taskId}")
   @ResponseStatus(HttpStatus.OK)
-  public void deleteTask(@PathVariable("taskId") Long taskId) {
+  public void delete(@PathVariable("taskId") Long taskId) {
     taskService.deleteTaskById(taskId);
   }
 
   @PutMapping("/update")
   @ResponseStatus(HttpStatus.OK)
-  public Task updateTask(@RequestBody Task task) {
+  public Task update(@RequestBody Task task) {
     Task updatedTask = taskService.update(task);
     updatedTask.add(linkTo(methodOn(TaskController.class)
-      .updateTask(task))
+      .update(task))
       .withSelfRel());
     return updatedTask;
   }
 
   @GetMapping("/all")
-  public CollectionModel<Task> getAllTasks() {
+  public CollectionModel<Task> getAll() {
     List<Task> allTasks = taskService.getAll();
     allTasks.forEach(task -> {
       Long taskId = task.getId();
