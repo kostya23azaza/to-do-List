@@ -1,6 +1,5 @@
 package com.example.todoList.service;
 
-import com.example.todoList.dto.UserDto;
 import com.example.todoList.entity.Role;
 import com.example.todoList.entity.User;
 import com.example.todoList.exception.UserNotFoundException;
@@ -29,8 +28,6 @@ public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
   private final UserToUserDtoConverter converter;
 
-  private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,7 +44,7 @@ public class UserService implements UserDetailsService {
   public User save(User user) {
     if (!userRepository.existsByUsername(user.getUsername())) {
       user.setRoles(user.getRoles());
-      user.setPassword(passwordEncoder.encode(user.getPassword()));
+      user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
       userRepository.save(user);
       return user;
