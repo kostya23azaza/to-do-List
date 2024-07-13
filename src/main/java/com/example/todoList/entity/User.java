@@ -4,8 +4,10 @@ package com.example.todoList.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.engine.jdbc.Size;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -30,28 +32,29 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  Long id;
 
   @Column(unique = true)
   @NotNull
-  private String username;
+  String username;
 
-  private String password;
+  String password;
 
-  private String email;
+  String email;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   @JsonManagedReference
-  private List<Task> tasks = new ArrayList<>();
+  List<Task> tasks = new ArrayList<>();
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_roles",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
   @JsonBackReference
-  private Set<Role> roles;
+  Set<Role> roles;
 }

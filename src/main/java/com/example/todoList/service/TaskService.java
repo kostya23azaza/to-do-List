@@ -1,6 +1,7 @@
 package com.example.todoList.service;
 
 
+import com.example.todoList.dto.TaskDto;
 import com.example.todoList.entity.Task;
 import com.example.todoList.exception.TaskNotFoundException;
 import com.example.todoList.exception.UserNotFoundException;
@@ -19,12 +20,12 @@ public class TaskService {
   private final TaskRepository taskRepository;
   private final UserRepository userRepository;
 
-  public Task getTaskById(Long id) {
+  public Task getById(Long id) {
     return taskRepository.findById(id)
       .orElseThrow(() -> new TaskNotFoundException(String.format("task with id %s doesn't not exist", id)));
   }
 
-  public void deleteTaskById(Long id) {
+  public void deleteById(Long id) {
     if (taskRepository.existsById(id)) {
       taskRepository.deleteById(id);
     } else {
@@ -45,6 +46,13 @@ public class TaskService {
     return task;
   }
 
+  public void normalUpdate(Long id, TaskDto dto) {
+    Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(String.format("task with id %s doesn't esists", id)));
+    userRepository.findById(dto.getUserId()).orElseThrow(() -> new UserNotFoundException(String.format("user with id %s doesnt' exists", dto.getUserId())));
+    task.setName(dto.getName());
+
+  }
+  
   public Task create(Task task) {
     Long userId = Optional.of(task.getUser())
       .orElseThrow(() -> new UserNotFoundException("user with doesn't not exist")).getId();
@@ -56,6 +64,6 @@ public class TaskService {
   }
 
   public List<Task> getAll() {
-    return taskRepository.findAll();
+    return taskRepository.findAll().stream().filter(task -> task.getUser() != null).toList();
   }
 }

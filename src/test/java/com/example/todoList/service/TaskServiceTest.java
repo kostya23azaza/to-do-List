@@ -58,14 +58,14 @@ public class TaskServiceTest {
   @Test
   public void deleteTaskByIdTest() {
     when(taskRepository.existsById(3L)).thenReturn(true);
-    taskService.deleteTaskById(3L);
+    taskService.deleteById(3L);
     verify(taskRepository).deleteById(3L);
   }
 
   @Test
   public void deleteTaskByIdWhenTaskNotFoundExceptionWasThrown() {
     when(taskRepository.existsById(3L)).thenReturn(false);
-    assertThrows(TaskNotFoundException.class, () -> taskService.deleteTaskById(3L));
+    assertThrows(TaskNotFoundException.class, () -> taskService.deleteById(3L));
     verify(taskRepository).existsById(3L);
   }
 
