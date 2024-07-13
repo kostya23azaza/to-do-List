@@ -42,6 +42,9 @@ public class UserService implements UserDetailsService {
   }
 
   public User save(User user) {
+    if (user == null) {
+      throw new UserValidationException("Не валидные данные");
+    }
     if (!userRepository.existsByUsername(user.getUsername())) {
       user.setRoles(user.getRoles());
       user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));

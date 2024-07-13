@@ -1,6 +1,7 @@
 package com.example.todoList.advice;
 
 import com.example.todoList.dto.ExceptionDto;
+import com.example.todoList.exception.CatNotFoundException;
 import com.example.todoList.exception.TaskNotFoundException;
 import com.example.todoList.exception.UserNotFoundException;
 import com.example.todoList.exception.UserValidationException;
@@ -36,6 +37,17 @@ public class ControllerExceptionAdvice {
       .httpStatus(HttpStatus.NOT_FOUND)
       .build();
   }
+
+  @ExceptionHandler(CatNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ExceptionDto handleCatNotFoundException(CatNotFoundException e) {
+    log.error(ERROR_MESSAGE,e.getClass().getSimpleName(), e);
+    return ExceptionDto.builder()
+            .message(e.getMessage())
+            .httpStatus(HttpStatus.NOT_FOUND)
+            .build();
+  }
+
 
   @ExceptionHandler(UserValidationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)

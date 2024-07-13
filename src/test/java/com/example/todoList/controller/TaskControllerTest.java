@@ -54,7 +54,7 @@ public class TaskControllerTest {
   @Test
   public void deleteTaskByIdTest() {
     taskController.delete(1L);
-    verify(taskService).deleteTaskById(1L);
+    verify(taskService).deleteById(1L);
   }
 
   @Test

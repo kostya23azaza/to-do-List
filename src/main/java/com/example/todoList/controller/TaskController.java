@@ -31,7 +31,7 @@ public class TaskController {
 
   @GetMapping(value = "/get/{taskId}")
   public Task getTaskById(@PathVariable("taskId") Long taskId) {
-    Task task = taskService.getTaskById(taskId);
+    Task task = taskService.getById(taskId);
     task.add(linkTo(methodOn(TaskController.class)
       .getTaskById(taskId))
       .withSelfRel());
@@ -51,7 +51,7 @@ public class TaskController {
   @DeleteMapping("/delete/{taskId}")
   @ResponseStatus(HttpStatus.OK)
   public void delete(@PathVariable("taskId") Long taskId) {
-    taskService.deleteTaskById(taskId);
+    taskService.deleteById(taskId);
   }
 
   @PutMapping("/update")
