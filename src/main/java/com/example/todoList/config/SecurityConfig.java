@@ -9,32 +9,34 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserService userService;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-      .csrf()
-        .disable()
-      .authorizeRequests()
-      .antMatchers("/users/registration").not().fullyAuthenticated()
-      .anyRequest().authenticated()
-      .and()
-      .formLogin()
-      .defaultSuccessUrl("/tasks/all", true)
-      .permitAll()
-      .and()
-      .logout()
-      .logoutUrl("/logout")
-      .permitAll()
-      .and()
-      .httpBasic();
+            .csrf()
+            .disable()
+            .authorizeRequests()
+            .antMatchers("/users/registration").not().fullyAuthenticated()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .defaultSuccessUrl("/tasks/all", true)
+            .permitAll()
+            .and()
+            .logout()
+            .logoutUrl("/logout")
+            .permitAll()
+            .and()
+            .httpBasic();
   }
 
   @Bean
@@ -45,5 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
+  }
+
+  @Bean
+  public HttpFirewall allowUrlEncodedNewlineHttpFirewall() {
+    StrictHttpFirewall firewall = new StrictHttpFirewall();
+    firewall.setAllowUrlEncodedLineSeparator(true); // Разрешить символ новой строки
+    return firewall;
   }
 }

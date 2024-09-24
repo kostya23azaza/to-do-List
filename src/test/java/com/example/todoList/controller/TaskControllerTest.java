@@ -39,9 +39,9 @@ public class TaskControllerTest {
 
   @Test
   public void getTaskByIdTest() {
-    when(taskService.getTaskById(1L)).thenReturn(task);
+    when(taskService.getById(1L)).thenReturn(task);
     assertEquals(task, taskController.getTaskById(1L));
-    verify(taskService).getTaskById(1L);
+    verify(taskService).getById(1L);
   }
 
   @Test

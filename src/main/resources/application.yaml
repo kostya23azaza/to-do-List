@@ -1,8 +1,10 @@
+server:
+  port: 8080
 spring:
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/test
+    url: jdbc:postgresql://db:5432/test
     username: postgres
     password: 1996
   # JPA properties
@@ -21,3 +23,14 @@ spring:
     enabled: true
     change-log: classpath:/db/db.changelog.yaml
     default-schema: public
+  # Kafka
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer

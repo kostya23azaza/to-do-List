@@ -43,7 +43,7 @@ public class TaskServiceTest {
   @Test
   public void getTaskByIdTest() {
     when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
-    Task taskById = taskService.getTaskById(1L);
+    Task taskById = taskService.getById(1L);
     assertEquals(task, taskById);
     verify(taskRepository).findById(1L);
   }
@@ -51,7 +51,7 @@ public class TaskServiceTest {
   @Test
   public void getTaskByIdWhenTaskNotFoundExceptionWasThrown() {
     when(taskRepository.findById(3L)).thenReturn(Optional.empty());
-    assertThrows(TaskNotFoundException.class, () -> taskService.getTaskById(3L));
+    assertThrows(TaskNotFoundException.class, () -> taskService.getById(3L));
     verify(taskRepository).findById(3L);
   }
 
