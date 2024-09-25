@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Список задач</title>
+    <a th:href="@{/common}" class="button">Вернутся на главную страницу</a>
+</head>
+<body>
+<h1>Список задач</h1>
+<ul th:if="${tasks != null}">
+    <li th:each="task : ${tasks}">
+        <span th:text="${task.id}">ID</span> -
+        <span th:text="${task.name}">Имя задачи</span>
+        <td th:text="${task.user.username}"/>
+    </li>
+</ul>
+</body>
+</html>

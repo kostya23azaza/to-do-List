@@ -1,5 +1,6 @@
 package com.example.todoList.controller;
 
+import com.example.todoList.dto.TaskDto;
 import com.example.todoList.entity.Task;
 import com.example.todoList.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -7,24 +8,18 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/tasks")
 public class TaskController {
 
   private final TaskService taskService;
@@ -39,13 +34,10 @@ public class TaskController {
   }
 
   @PostMapping("/create")
-  @ResponseStatus(HttpStatus.CREATED)
-  public Task create(@RequestBody Task task) {
-    Task newTask = taskService.create(task);
-    newTask.add(linkTo(methodOn(TaskController.class)
-      .create(task))
-      .withSelfRel());
-    return newTask;
+  public String create(@RequestBody TaskDto taskDto, Model model) {
+    Task newTask = taskService.create(taskDto);
+    model.addAttribute("task", newTask);
+    return "create";
   }
 
   @DeleteMapping("/delete/{taskId}")
@@ -65,14 +57,9 @@ public class TaskController {
   }
 
   @GetMapping("/all")
-  public CollectionModel<Task> getAll() {
+  public String getAll(Model model) {
     List<Task> allTasks = taskService.getAll();
-    allTasks.forEach(task -> {
-      Long taskId = task.getId();
-      Link selfLink = linkTo(TaskController.class).slash(taskId).withSelfRel();
-      task.add(selfLink);
-    });
-    Link link = linkTo(TaskController.class).withSelfRel();
-    return CollectionModel.of(allTasks, link);
+    model.addAttribute("tasks", allTasks);
+    return "tasks";
   }
 }

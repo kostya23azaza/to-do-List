@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Task</title>
+</head>
+<body>
+<h1>Create Task</h1>
+<div class="container mt-5 collapse" id="collapseForm"
+     th:classappend="${#fields.hasAnyErrors()} ? 'show' : ''"
+     th:object="${task}">
+    <form th:action="@{'/tasks/create'}" method="post">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Advertisement title :</label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{name}" placeholder="insert title"/>
+            </div>
+            <div th:if="${#fields.hasErrors('name')}">
+                <span th:errors="*{name}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Car model :</label>
+            <div class="col-sm-6">
+                <input type="number" th:field="*{user}" placeholder="insert model"/>
+            </div>
+            <div th:if="${#fields.hasErrors('user')}">
+                <span th:errors="*{user}"/>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-dark" type="submit">Add</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

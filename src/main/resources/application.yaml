@@ -21,3 +21,8 @@ spring:
     enabled: true
     change-log: classpath:/db/db.changelog.yaml
     default-schema: public
+  thymeleaf:
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false

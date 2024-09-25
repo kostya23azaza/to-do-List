@@ -3,10 +3,13 @@ package com.example.todoList.service;
 
 import com.example.todoList.dto.TaskDto;
 import com.example.todoList.entity.Task;
+import com.example.todoList.entity.User;
 import com.example.todoList.exception.TaskNotFoundException;
 import com.example.todoList.exception.UserNotFoundException;
 import com.example.todoList.repository.TaskRepository;
 import com.example.todoList.repository.UserRepository;
+import com.example.todoList.service.mapper.CatMapper;
+import com.example.todoList.service.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ public class TaskService {
 
   private final TaskRepository taskRepository;
   private final UserRepository userRepository;
+  private final TaskMapper taskMapper;
 
   public Task getById(Long id) {
     return taskRepository.findById(id)
@@ -53,14 +57,15 @@ public class TaskService {
 
   }
   
-  public Task create(Task task) {
-    Long userId = Optional.of(task.getUser())
-      .orElseThrow(() -> new UserNotFoundException("user with doesn't not exist")).getId();
-    if (userRepository.existsById(userId)) {
+  public Task create(TaskDto taskDto) {
+    if (userRepository.existsById(taskDto.getUserId())) {
+      User user = userRepository.findById(taskDto.getUserId()).orElseThrow();
+      taskDto.setUserId(user.getId());
+      Task task = taskMapper.taskDtoToTask(taskDto);
       taskRepository.save(task);
       return task;
     }
-    throw new UserNotFoundException(String.format("user with id %s doesn't not exist", userId));
+    throw new UserNotFoundException(String.format("user with id %s doesn't not exist", taskDto.getUserId()));
   }
 
   public List<Task> getAll() {
